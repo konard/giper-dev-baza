@@ -14,7 +14,7 @@ namespace $ {
 		'data unit type'() {
 			
 			const unit = $giper_baza_unit_sand.make( 2 )
-			unit.hint( 'nil', 'term' )
+			unit.hint( 'term' )
 			unit.ball( new Uint8Array([ 0xFF, 0xFF ]) )
 			
 			$mol_assert_equal( unit.kind(), 'sand' )
