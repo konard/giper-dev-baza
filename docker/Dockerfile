@@ -1,10 +1,5 @@
 FROM node:24-alpine
-RUN apk add --no-cache git
-WORKDIR /mam
-COPY ./ giper/baza
-RUN npm exec mam@latest giper/baza/app/run
-
-FROM node:24-alpine
-COPY --from=0 /mam/giper/baza/app/run/- /mam/giper/baza/app/run/-
-WORKDIR /mam/giper/baza/app/run/-
+COPY ./giper/baza/app/run/- /giper/baza
+WORKDIR /giper/baza
+RUN [ "npm", "install" ]
 ENTRYPOINT [ "node", "node.js", "port=9090" ]
