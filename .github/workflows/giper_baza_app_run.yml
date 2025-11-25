@@ -21,6 +21,5 @@ jobs:
         folder: 'giper/baza/app/run/-'
     - uses: GlueOps/github-actions-build-push-containers@v0.4.5
       with:
-        dockerfile: 'docker/Dockerfile'
         context: '${GITHUB_WORKSPACE}/giper/baza/app/run'
         target_directory: 'xxx'
