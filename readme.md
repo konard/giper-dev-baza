@@ -70,7 +70,7 @@
   - **🕓dura** - iso8601 duration.
   - **🎬span** - iso8601 range.
   - **📚list** - array of any type.
-  - **📖tupl** - tuple of names values.
+  - **📖tupl** - tuple of named values.
   - **🛐elem** - Element of Document Object Model (xml, xhtml etc).
   - **🌴tree** - Abstract Syntax Tree.
 
@@ -84,7 +84,7 @@
 - **Mine** - Units/Rocks storage.
 - **Yard** - Glob synchronizer.
 - **Port** - Communication link with other peer.
-- **Delta** - Difference of two Land states as list of Units.
+- **Diff** - Difference of two Land states as list of Units.
 - **Face** - Statistics about Units in Land. it's total Units count & dictionary which maps Peer to Time.
 - **Pack** - Universal binary package which contains some Faces/Units/Rocks.
 
