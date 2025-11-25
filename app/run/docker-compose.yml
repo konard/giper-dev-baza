@@ -7,7 +7,7 @@ services:
     logging:
       driver: "local"
     volumes:
-      - baza_public:/mam/giper/baza/app/run/-/.baza
+      - baza_public:/giper/baza/.baza
       - baza_private:/root/.local/share/mol_state_local
     restart: unless-stopped
     network_mode: host
