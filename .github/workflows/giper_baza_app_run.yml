@@ -23,4 +23,3 @@ jobs:
       with:
         context: '${GITHUB_WORKSPACE}/giper/baza/app/run'
         target_directory: 'nope'
-        tags: 'latest'
