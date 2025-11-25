@@ -11,6 +11,12 @@
 
 ## Guarantees
 
+**Strict Availability** - most strict partition tolerant guarantee. Forbidden phenomenons:
+  - **Chaotic Read/Write** - violation of the operations sequence.
+  - **Invisible/Causless Write** - violation of operations causality.
+  - **Dirty Read/Write** - violation of transaction atomicity.
+  - **Phantom/Fuzzy Read** - violation of operation idempotence.
+
 ![](diagram/crus-jepsen.png)
 
 ## Vocabulary

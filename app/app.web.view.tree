@@ -6,11 +6,6 @@ $giper_baza_app $mol_book2_catalog
 			uri \https://github.com/giper-dev/baza
 		<= Status $giper_baza_status
 	spreads *
-		\
-			<= Info $hyoo_page
-				menu_title \💨 Info
-				side_main_id \sy2u0y_9rb8zj
-				Gap* null
 		glob <= Glob $giper_baza_glob_book
 			addon_tools /
 				<= Spread_close
@@ -18,18 +13,6 @@ $giper_baza_app $mol_book2_catalog
 			tools /
 				<= Spread_close
 		slot <= Slot $giper_baza_auth_slot
-			tools /
-				<= Spread_close
-		casting <= Casting $hyoo_calc
-			title \🔀 Cast
-			editable false
-			sheet_id \jfls98_bf0zru
-			Theme null
-			Fork null
-			New null
-			Lights null
-			Source null
-			Current null
 			tools /
 				<= Spread_close
 	placeholders /
