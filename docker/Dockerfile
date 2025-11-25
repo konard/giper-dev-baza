@@ -1,5 +1,4 @@
 FROM node:25
-RUN apk add --no-cache git
 WORKDIR /mam
 COPY ./ giper/baza
 RUN npm exec mam@latest giper/baza/app/run
