@@ -1,5 +1,7 @@
 namespace $ {
 	
+	export let $giper_baza_unit_seal_limit = 14
+	
 	/**  Sign for hash list */
 	export class $giper_baza_unit_seal extends $giper_baza_unit_base {
 		
@@ -26,18 +28,15 @@ namespace $ {
 			return Boolean( this.meta() & 0b1000_0000 )
 		}
 
-		_alive_count = 0
-		
-		alive_shift( shift: number ) {
-			this._alive_count += shift
-		}
+		alive_items = new Set< string >
 		
 		alive_full() {
-			return this.size() === this._alive_count
+			return this.alive_items.size === $giper_baza_unit_seal_limit
 		}
 		
-		alive_free() {
-			return 0 === this._alive_count
+		alive_list() {
+			const alive = this.alive_items
+			return this.hash_list().filter( hash => alive.has( hash.str ) )
 		}
 		
 		hash_item( index: number, next?: $giper_baza_link ) {
@@ -116,16 +115,18 @@ namespace $ {
 		[ $mol_dev_format_head ]() {
 			return $mol_dev_format_span( {} ,
 				$mol_dev_format_native( this ) ,
-				' ',
+				' 👾',
 				$mol_dev_format_auto( this.lord() ),
 				' ✍ ',
-				$mol_dev_format_auto( this.hash_list() ),
-				' ',
 				$mol_dev_format_shade(
 					this.moment().toString( 'YYYY-MM-DD hh:mm:ss' ),
-					' #',
+					' +',
 					this.tick(),
 				),
+				' #',
+				$mol_dev_format_auto( this.hash() ),
+				' ',
+				$mol_dev_format_auto( this.hash_list() ),
 			)
 		}
 		

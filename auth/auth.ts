@@ -35,7 +35,7 @@ namespace $ {
 		[ $mol_dev_format_head ]() {
 			return $mol_dev_format_span( {} ,
 				$mol_dev_format_native( this ) ,
-				' ',
+				' 👾',
 				$mol_dev_format_auto( this.lord() ),
 				' 🎫',
 			)

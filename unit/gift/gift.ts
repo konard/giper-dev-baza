@@ -89,22 +89,23 @@ namespace $ {
 		[ $mol_dev_format_head ]() {
 			return $mol_dev_format_span( {} ,
 				$mol_dev_format_native( this ) ,
-				' ',
+				' 👾',
 				$mol_dev_format_auto( this.lord() ),
-				' 🏅 ',
-				$mol_dev_format_auto( this.mate() ),
-				this.code().some( v => v ) ? ' 🔐' : ' 👀',
-				$giper_baza_rank_tier[ this.tier() ],
-				':',
-				this.rate(),
+				' 🏅',
 				' ',
 				$mol_dev_format_shade(
 					this.moment().toString( 'YYYY-MM-DD hh:mm:ss' ),
-					' #',
+					' +',
 					this.tick(),
 				),
-				' ',
+				' #',
 				$mol_dev_format_auto( this.hash() ),
+				' 👾',
+				$mol_dev_format_accent( this.mate().str || '_________________' ),
+				this.code().some( v => v ) ? ' 🔐' : ' 👀',
+				$giper_baza_rank_tier[ this.tier() ],
+				':',
+				this.rate().toString( 16 ).toUpperCase(),
 			)
 		}
 		

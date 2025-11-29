@@ -161,20 +161,22 @@ namespace $ {
 		[ $mol_dev_format_head ]() {
 			return $mol_dev_format_span( {},
 				$mol_dev_format_native( this ),
-				' ',
+				' 👾',
 				$mol_dev_format_auto( this.lord() ),
 				' 📦 ',
-				this.lead(),
-				$mol_dev_format_shade( '\\' ),
-				$mol_dev_format_accent( this.head() ),
-				$mol_dev_format_shade( '/' ),
-				this.self(),
-				' ',
 				$mol_dev_format_shade(
 					this.moment().toString( 'YYYY-MM-DD hh:mm:ss' ),
-					' #',
+					' +',
 					this.tick(),
 				),
+				' #',
+				$mol_dev_format_auto( this.hash() ),
+				' ',
+				this.lead().str || '__knot__',
+				$mol_dev_format_shade( '\\' ),
+				$mol_dev_format_accent( this.head().str || '__root__' ),
+				$mol_dev_format_shade( '/' ),
+				this.self().str || '__spec__',
 				' ',
 				{
 					term: '💼',
@@ -188,8 +190,6 @@ namespace $ {
 				// 	? $mol_dev_format_shade( this.hash() )
 				// 	: $mol_dev_format_native( $giper_baza_vary_decode({ tip: this.tip(), bin: this.data() }) )
 				// ),
-				' ',
-				$mol_dev_format_auto( this.hash() ),
 			)
 		}
 

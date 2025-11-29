@@ -47,8 +47,8 @@ namespace $ {
 				$mol_dev_format_native( this ),
 				$mol_dev_format_shade(
 					' ', $giper_baza_time_dump( this.time ),
-					' #', this.tick,
-					' @', this.summ,
+					' +', this.tick,
+					' %', this.summ,
 				)
 			)
 			

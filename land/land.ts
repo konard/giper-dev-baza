@@ -34,6 +34,9 @@ namespace $ {
 		
 		seal_add( seal: $giper_baza_unit_seal ) {
 			
+			const prev = this._seal_shot.get( seal.shot().str )
+			if( prev ) return
+			
 			for( const hash of seal.hash_list() ) {
 				const prev = this._seal_item.get( hash.str )
 				if( $giper_baza_unit_seal.compare( prev, seal ) <= 0 ) continue
@@ -43,11 +46,10 @@ namespace $ {
 			const peer = seal.lord().peer()
 			this.faces.peer_time( peer.str, seal.time(), seal.tick() )
 			
-			const prev = this._seal_shot.get( seal.shot().str )
-			if( prev ) return
-			
 			this._seal_shot.set( seal.shot().str, seal )
 			this.faces.peer_summ_shift( peer.str, +1 )
+			
+			if( !seal.alive_full() ) this._seal_partial.add( seal )
 			
 		}
 		
@@ -103,7 +105,7 @@ namespace $ {
 			const seal = this.unit_seal( unit )
 			if( !seal ) return
 			
-			seal.alive_shift( +1 )
+			seal.alive_items.add( unit.hash().str )
 			
 			if( seal.alive_full() ) this._seal_partial.delete( seal )
 			else this._seal_partial.add( seal )
@@ -115,8 +117,10 @@ namespace $ {
 			const seal = this.unit_seal( unit )
 			if( !seal ) return
 			
-			seal.alive_shift( -1 )
-			if( seal.alive_free() ) this.seal_del( seal )
+			seal.alive_items.delete( unit.hash().str )
+			
+			if( !seal.alive_items.size ) this.seal_del( seal )
+			else this._seal_partial.add( seal )
 			
 		}
 		
@@ -1062,10 +1066,13 @@ namespace $ {
 				const pack = $giper_baza_pack.make([[ this.link().str, part ]])
 				this.bus().send( pack.buffer )
 				
+				const reaping = [ ... this.units_reaping ]
+				
 				if( this.$.$giper_baza_log() ) this.$.$mol_log3_done({
 					place: this,
 					message: '💾 Save Unit',
-					units: persisting,
+					ins: persisting,
+					del: reaping,
 				})
 				
 				await $mol_wire_async( mine ).units_save({ ins: persisting, del: [ ... this.units_reaping ] })
@@ -1080,35 +1087,49 @@ namespace $ {
 		
 		async units_sign( units: readonly $giper_baza_unit_base[] ) {
 			
-			const lands = new Map< $giper_baza_land, $giper_baza_unit_base[] >()
+			const lands = new Map< $giper_baza_land, $giper_baza_link[] >()
 			for( const unit of units ) {
 				
 				let us = lands.get( unit._land! )
-				if( us ) us.push( unit )
-				else lands.set( unit._land!, [ unit ] )
+				if( us ) us.push( unit.hash() )
+				else lands.set( unit._land!, [ unit.hash() ] )
 				
 			}
 			
-			const threads = [ ... lands.entries() ].flatMap( ([ land, units ])=> {
+			for( const seal of this._seal_partial ) {
+				
+				if( seal.lord().str !== this.auth().pass().lord().str ) continue
+				
+				let us = lands.get( this )
+				if( !us ) lands.set( seal._land!, us = [] )
+					
+				const hashes = seal.alive_list()
+				us.push( ... hashes )
+				
+				this.seal_del( seal )
+			}
+			
+			const threads = [ ... lands.entries() ].flatMap( ([ land, hashes ])=> {
 				
 				const auth = land.auth()
 				const rate = $giper_baza_rank_rate_of( land.pass_rank( auth.pass() ) )
 				const wide = Boolean( land.link().area().str )
 				
-				return $mol_array_chunks( units, 14 ).map( async( units )=> {
+				return $mol_array_chunks( hashes, $giper_baza_unit_seal_limit ).map( async( hashes )=> {
 				
-					const seal = $giper_baza_unit_seal.make( units.length, wide )
+					const seal = $giper_baza_unit_seal.make( hashes.length, wide )
 					
 					seal.time_tick( this.faces.tick().time_tick )
 					seal.lord( auth.pass().lord() )
-					seal.hash_list( units.map( unit => unit.hash() ) )
+					seal.hash_list( hashes )
+					seal._land = this
 					
 					const shot = seal.shot().mix( this.link() )
 					do {
 						seal.sign( await auth.sign( shot ) )
 					} while( seal.rate_min() > rate )
 					
-					seal._alive_count = units.length
+					seal._alive_count = hashes.length
 					if( !seal.alive_full() ) this._seal_partial.add( seal )
 					
 					return seal
