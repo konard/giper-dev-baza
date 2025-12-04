@@ -489,6 +489,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $node_internal_check(name: string): boolean;
+}
+
+declare namespace $ {
     function $mol_fail_catch(error: unknown): boolean;
 }
 
@@ -1958,6 +1962,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    let $giper_baza_unit_seal_limit: number;
     class $giper_baza_unit_seal extends $giper_baza_unit_base {
         static length(size: number): number;
         static make(size: number, wide: boolean): $giper_baza_unit_seal;
@@ -1967,10 +1972,9 @@ declare namespace $ {
         }): number;
         size(): number;
         wide(): boolean;
-        _alive_count: number;
-        alive_shift(shift: number): void;
+        alive_items: Set<string>;
         alive_full(): boolean;
-        alive_free(): boolean;
+        alive_list(): $giper_baza_link[];
         hash_item(index: number, next?: $giper_baza_link): $giper_baza_link;
         _hash_list: readonly $giper_baza_link[];
         hash_list(next?: $giper_baza_link[]): $giper_baza_link[];
