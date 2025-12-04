@@ -3,7 +3,7 @@ namespace $ {
 	export class $giper_baza_stat_series extends $giper_baza_dict_to( $giper_baza_atom_real ) {
 		
 		@ $mol_action
-		tick( key: bigint, val: number ) {
+		tick( key: number, val: number ) {
 			this.key( key, null ).val( this.initial() + val )
 		}
 		
