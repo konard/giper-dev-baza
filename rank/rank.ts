@@ -45,16 +45,16 @@ namespace $ {
 	/** Ease of making changes, depends on fame: evil, harm, even, nice, good */
 	export enum $giper_baza_rank_rate {
 
-		/** Very hard challenge. Minutes to put. */
+		/** Very hard challenge. Tens seconds to put. */
 		late = 0b0000_0000,
 		
-		/** Hard challendge. Tens seconds to put. */
+		/** Hard challendge. Seconds to put. */
 		long = 0b0000_0011,
 
-		/** Required some work to prevent spam. Seconds to put. */
+		/** Required some work to prevent spam. Hundred milliseconds to put. */
 		slow = 0b0000_0111,
 
-		/** Slow mode. Hundred milliseconds to put. */
+		/** Slow mode. Tens milliseconds to put. */
 		fast = 0b0000_1011,
 
 		/** No work required. As fast as possble. Milliseconds to put. */
