@@ -8265,11 +8265,11 @@ var $;
         size(next) {
             if (next === undefined) {
                 let byte = this.uint8(38);
-                return byte === 255 ? (this.uint32(38) << 8 >> 8) : byte;
+                return byte === 255 ? (this.uint32(38) >>> 8) : byte;
             }
             else {
                 if (next > $giper_baza_unit_sand.size_equator)
-                    this.uint32(38, next + 255 * 2 ** 24);
+                    this.uint32(38, 255 | (next << 8));
                 else
                     this.uint8(38, next);
                 return next;

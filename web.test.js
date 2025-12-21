@@ -4173,6 +4173,14 @@ var $;
             $mol_assert_equal(unit.size(), 2);
             $mol_assert_equal(unit.ball(), new Uint8Array([0xFF, 0xFF]));
         },
+        'big data unit type'() {
+            const unit = $giper_baza_unit_sand.make(1000);
+            unit.hint('term');
+            unit.ball(new Uint8Array(1000));
+            $mol_assert_equal(unit.kind(), 'sand');
+            $mol_assert_equal(unit.size(), 1000);
+            $mol_assert_equal(unit.ball(), new Uint8Array(1000));
+        },
         'gift unit fields'() {
             const unit = $giper_baza_unit_gift.make();
             $mol_assert_equal(unit.time(), 0);

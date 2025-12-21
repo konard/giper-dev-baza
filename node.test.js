@@ -9395,11 +9395,11 @@ var $;
         size(next) {
             if (next === undefined) {
                 let byte = this.uint8(38);
-                return byte === 255 ? (this.uint32(38) << 8 >> 8) : byte;
+                return byte === 255 ? (this.uint32(38) >>> 8) : byte;
             }
             else {
                 if (next > $giper_baza_unit_sand.size_equator)
-                    this.uint32(38, next + 255 * 2 ** 24);
+                    this.uint32(38, 255 | (next << 8));
                 else
                     this.uint8(38, next);
                 return next;
@@ -15281,6 +15281,14 @@ var $;
             $mol_assert_equal(unit.kind(), 'sand');
             $mol_assert_equal(unit.size(), 2);
             $mol_assert_equal(unit.ball(), new Uint8Array([0xFF, 0xFF]));
+        },
+        'big data unit type'() {
+            const unit = $giper_baza_unit_sand.make(1000);
+            unit.hint('term');
+            unit.ball(new Uint8Array(1000));
+            $mol_assert_equal(unit.kind(), 'sand');
+            $mol_assert_equal(unit.size(), 1000);
+            $mol_assert_equal(unit.ball(), new Uint8Array(1000));
         },
         'gift unit fields'() {
             const unit = $giper_baza_unit_gift.make();
