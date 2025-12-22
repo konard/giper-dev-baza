@@ -411,7 +411,10 @@ namespace $ {
 			
 			for( const kids of this._sand.values() ) {
 				for( const peers of kids.values() ) {
-					for( const sand of peers.values() ) collect( sand )
+					for( const sand of peers.values() ) {
+						this.sand_decode( sand )
+						collect( sand )
+					}
 				}
 			}
 			
@@ -1194,10 +1197,10 @@ namespace $ {
 			if( sand._vary !== undefined ) return sand._vary
 			if( sand._open !== null ) return sand._vary = ( $giper_baza_vary.take( sand._open ) as $giper_baza_vary_type[] )[0] ?? null
 			
-			let bin = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync( this.mine() ).ball_load( sand.path() ) : sand.data()
-			if( secret && bin && sand.size() ) {
+			sand._ball = sand._open = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync( this.mine() ).ball_load( sand.path() ) : sand.data()
+			if( secret && sand._ball && sand.size() ) {
 				try {
-					bin = $mol_wire_sync( secret ).decrypt( bin, sand.salt() )
+					sand._open = $mol_wire_sync( secret ).decrypt( sand._ball, sand.salt() )
 				} catch( error: any ) {
 					if( $mol_fail_catch( error ) ) {
 						if( error.message ) $mol_fail_hidden( error )
@@ -1206,8 +1209,7 @@ namespace $ {
 				}
 			}
 			
-			sand._open = bin
-			return sand._vary = ( bin ? ( $giper_baza_vary.take( bin ) as $giper_baza_vary_type[] )[0] ?? null : null )
+			return sand._vary = ( sand._open ? ( $giper_baza_vary.take( sand._open ) as $giper_baza_vary_type[] )[0] ?? null : null )
 			
 		}
 		
