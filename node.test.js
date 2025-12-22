@@ -8403,8 +8403,10 @@ var $;
             }
             for (const kids of this._sand.values()) {
                 for (const peers of kids.values()) {
-                    for (const sand of peers.values())
+                    for (const sand of peers.values()) {
+                        this.sand_decode(sand);
                         collect(sand);
+                    }
                 }
             }
             for (const [peer, face] of skip_faces) {
@@ -8930,10 +8932,10 @@ var $;
                 return sand._vary;
             if (sand._open !== null)
                 return sand._vary = $giper_baza_vary.take(sand._open)[0] ?? null;
-            let bin = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync(this.mine()).ball_load(sand.path()) : sand.data();
-            if (secret && bin && sand.size()) {
+            sand._ball = sand._open = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync(this.mine()).ball_load(sand.path()) : sand.data();
+            if (secret && sand._ball && sand.size()) {
                 try {
-                    bin = $mol_wire_sync(secret).decrypt(bin, sand.salt());
+                    sand._open = $mol_wire_sync(secret).decrypt(sand._ball, sand.salt());
                 }
                 catch (error) {
                     if ($mol_fail_catch(error)) {
@@ -8944,8 +8946,7 @@ var $;
                     }
                 }
             }
-            sand._open = bin;
-            return sand._vary = (bin ? $giper_baza_vary.take(bin)[0] ?? null : null);
+            return sand._vary = (sand._open ? $giper_baza_vary.take(sand._open)[0] ?? null : null);
         }
         encryptable() {
             return !this._sand.size;
