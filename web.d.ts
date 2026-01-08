@@ -1274,14 +1274,11 @@ declare namespace $ {
 declare namespace $ {
     function $mol_charset_ucf_encode(str: string): Uint8Array<ArrayBuffer>;
     function $mol_charset_ucf_encode_to(str: string, buf: Uint8Array<ArrayBuffer>, from?: number): number;
+    function $mol_charset_ucf_decode(buffer: Uint8Array<ArrayBuffer>, mode?: number): string;
 }
 
 declare namespace $ {
     function $mol_bigint_decode(buf: Uint8Array<ArrayBuffer>): bigint;
-}
-
-declare namespace $ {
-    function $mol_charset_ucf_decode(buffer: Uint8Array<ArrayBuffer>, mode?: number): string;
 }
 
 declare namespace $ {

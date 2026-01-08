@@ -3276,15 +3276,51 @@ var $;
 (function ($_1) {
     var $$;
     (function ($$) {
+        function check(text, bytes) {
+            const ideal = new Uint8Array(bytes);
+            const actual = $mol_charset_ucf_encode(text);
+            $mol_assert_equal($mol_charset_ucf_decode(actual), text);
+            $mol_assert_equal(actual, ideal);
+        }
         $mol_test({
-            "Complex UCF encoding"($) {
-                $mol_assert_equal($mol_charset_ucf_encode('hi мир, 美しい 世界 🏴‍☠\t\n'), new Uint8Array([
-                    0x68, 0x69, 0x20,
-                    0xA4, 0x3C, 0x38, 0x40, 0x8B, 0x95,
-                    0x98, 0x0E, 0xBF, 0xFC, 0x57, 0x44, 0x95,
-                    0x98, 0x16, 0x5C, 0x4C, 0xAA, 0x95,
-                    0x9B, 0x74, 0xA7, 0xDC, 0x0D, 0xE8, 0x20, 0x9C, 0x09, 0x0A,
-                ]));
+            "Full ASCII compatible"($) {
+                check('hi', [0x68, 0x69]);
+            },
+            "1B ASCII with diacritic"($) {
+                check('allo\u0302', [0x61, 0x6C, 0x6C, 0x6F, 0xEA]);
+            },
+            "1B Cyrillic"($) {
+                check('мир', [0x88, 0x3C, 0xE2, 0x40, 0xF8]);
+            },
+            "1B Cyrillic with nummbers and punctuation"($) {
+                check('м.1', [0x88, 0x3C, 0x2E, 0x31, 0xF8]);
+            },
+            "2B Kanji"($) {
+                check('美', [0xF9, 0x0E, 0x63, 0x87]);
+            },
+            "3B rare Kanji"($) {
+                check('𲎯', [0xF7, 0x2F, 0x47, 0x0C, 0x89]);
+            },
+            "1B Kana"($) {
+                check('しい', [0xE0, 0x57, 0x44, 0xA0]);
+            },
+            "2B Emoji"($) {
+                check('🏴', [0xFF, 0x74, 0x4B, 0x81]);
+            },
+            "2B Emoji with 1B modifiers"($) {
+                check('🏴‍☠', [0xFF, 0x74, 0x4B, 0xC1, 0x0D, 0x8C, 0xA9, 0xB4]);
+            },
+            "2B Emoji with 3B Tag"($) {
+                check('🏴\u{E007F}', [0xFF, 0x74, 0x4B, 0xF8, 0x7F, 0x00, 0xF3, 0x89]);
+            },
+            "Mixed scripts"($) {
+                check('allô 美しい мир, 🏴‍☠\n', [
+                    0x61, 0x6C, 0x6C, 0x6F, 0xEA, 0x20,
+                    0xF9, 0x0E, 0x63, 0xE7, 0x57, 0x44, 0x20,
+                    0xA8, 0x3C, 0xE2, 0x40, 0x2C, 0x20,
+                    0xF7, 0x74, 0x4B, 0xC1, 0x0D, 0x8C, 0xA9, 0x0A,
+                    0xB4,
+                ]);
             },
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
@@ -3325,26 +3361,6 @@ var $;
             "8 byte int"($) {
                 $mol_assert_equal($mol_bigint_decode(new Uint8Array(new BigInt64Array([128n * 256n ** 7n - 1n]).buffer)), 128n * 256n ** 7n - 1n);
                 $mol_assert_equal($mol_bigint_decode(new Uint8Array(new BigInt64Array([-128n * 256n ** 7n]).buffer)), -128n * 256n ** 7n);
-            },
-        });
-    })($$ = $_1.$$ || ($_1.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($_1) {
-    var $$;
-    (function ($$) {
-        $mol_test({
-            "Complex UCF eecoding"($) {
-                $mol_assert_equal('hi мир, 美しい 世界 🏴‍☠\t\n', $mol_charset_ucf_decode(new Uint8Array([
-                    0x68, 0x69, 0x20,
-                    0xA4, 0x3C, 0x38, 0x40, 0x8B, 0x95,
-                    0x98, 0x0E, 0xBF, 0xFC, 0x57, 0x44, 0x95,
-                    0x98, 0x16, 0x5C, 0x4C, 0xAA, 0x95,
-                    0x9B, 0x74, 0xA7, 0xDC, 0x0D, 0xE8, 0x20, 0x9C, 0x09, 0x0A,
-                ])));
             },
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
@@ -3468,11 +3484,11 @@ var $;
             },
             "vary pack text"($) {
                 check(['foo'], [text | 3, ...str('foo')]);
-                check(['абв'], [text | 4, ...str('абв')]);
+                check(['абв'], [text | 5, ...str('абв')]);
                 const long_lat = 'abcdefghijklmnopqrst';
                 check([long_lat], [text | L1, 20, ...str(long_lat)]);
                 const long_cyr = 'абвгдеёжзийклмнопрст';
-                check([long_cyr], [text | L1, 21, ...str(long_cyr)]);
+                check([long_cyr], [text | L1, 22, ...str(long_cyr)]);
             },
             "vary pack dedup text"($) {
                 check([["f", "f"]], [list | 2, text | 1, ...str('f'), link | 0]);

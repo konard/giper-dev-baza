@@ -6988,57 +6988,146 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    const ascii_set = [...`0123456789.,:;()'"- \n`].map(c => c.charCodeAt(0));
+    const ascii_map = new Array(0x80).fill(0);
+    for (let i = 0; i < ascii_set.length; ++i)
+        ascii_map[ascii_set[i]] = i | 0x80;
+    const diacr_set = [
+        0x00, 0x01, 0x0F, 0x0B, 0x07, 0x08, 0x12, 0x13,
+        0x02, 0x0C, 0x06, 0x11, 0x03, 0x09, 0x0A, 0x04,
+        0x28, 0x31, 0x27, 0x26, 0x23,
+    ];
+    const diacr_map = new Array(0x80).fill(0);
+    for (let i = 0; i < diacr_set.length; ++i)
+        diacr_map[diacr_set[i]] = i | 0x80;
+    const wide_offset = 0x0E_00;
+    const wide_limit = 128 * 128 * 8 + wide_offset;
+    const tiny_limit = 128 * 98;
+    const full_mode = 0x95;
+    const wide_mode = 0x96;
+    const tiny_mode = 0x9E;
     function $mol_charset_ucf_encode(str) {
         const buf = $mol_charset_buffer(str.length * 3);
         return buf.slice(0, $mol_charset_ucf_encode_to(str, buf));
     }
     $.$mol_charset_ucf_encode = $mol_charset_ucf_encode;
-    const fast_char = `0123456789.,:;()?!-'" \n`;
-    const fast_map = new Array(0x80).fill(0);
-    for (let i = 0; i < fast_char.length; ++i)
-        fast_map[fast_char[i].charCodeAt(0)] = i | 0x80;
     function $mol_charset_ucf_encode_to(str, buf, from = 0) {
         let pos = from;
-        let mode = 0x9C;
+        let mode = tiny_mode;
+        const write_high = (code) => {
+            buf[pos++] = ((code + 128 - mode) & 0x7F) | 0x80;
+        };
+        const write_remap = (code) => {
+            const fast = ascii_map[code];
+            if (fast)
+                write_high(fast);
+            else
+                buf[pos++] = code;
+        };
+        const write_mode = (m) => {
+            write_high(m);
+            mode = m;
+        };
         for (let i = 0; i < str.length; i++) {
             let code = str.charCodeAt(i);
-            if (code >= 0xd800 && code < 0xe000)
+            if (code >= 0xD8_00 && code < 0xDC_00)
                 code = ((code - 0xd800) << 10) + str.charCodeAt(++i) + 0x2400;
             if (code < 0x80) {
-                if (mode !== 0x9C) {
-                    const fast = fast_map[code];
-                    if (fast)
-                        code = fast;
-                    else
-                        buf[pos++] = mode = 0x9C;
+                if (mode !== tiny_mode) {
+                    const fast = ascii_map[code];
+                    if (!fast)
+                        write_mode(tiny_mode);
                 }
                 buf[pos++] = code;
             }
-            else if (code < 0x32_00) {
-                const page = (code >> 7) + 0x9C;
+            else if (code < tiny_limit) {
+                const page = (code >> 7) + tiny_mode;
+                code &= 0x7F;
+                if (page === 164) {
+                    const fast = diacr_map[code];
+                    if (fast) {
+                        if (mode !== tiny_mode)
+                            write_mode(tiny_mode);
+                        write_high(fast);
+                        continue;
+                    }
+                }
                 if (mode !== page)
-                    buf[pos++] = mode = page;
-                buf[pos++] = code & 0x7F;
+                    write_mode(page);
+                write_remap(code);
             }
-            else if (code < 0x04_20_00) {
-                code -= 0x2000;
-                const page = (code >> 15) + 0x98;
+            else if (code < wide_limit) {
+                code -= wide_offset;
+                const page = (code >> 14) + wide_mode;
                 if (mode !== page)
-                    buf[pos++] = mode = page;
-                buf[pos++] = code & 0x7F;
-                buf[pos++] = code >> 7;
+                    write_mode(page);
+                write_remap(code & 0x7F);
+                write_remap((code >> 7) & 0x7F);
             }
             else {
-                if (mode !== 0x97)
-                    buf[pos++] = mode = 0x97;
-                buf[pos++] = code & 0x7F;
-                buf[pos++] = code >> 7;
-                buf[pos++] = code >> 15;
+                if (mode !== full_mode)
+                    write_mode(full_mode);
+                write_remap(code & 0x7F);
+                write_remap((code >> 7) & 0x7F);
+                write_remap(code >> 14);
             }
         }
+        if (mode !== tiny_mode)
+            write_mode(tiny_mode);
         return pos - from;
     }
     $.$mol_charset_ucf_encode_to = $mol_charset_ucf_encode_to;
+    function $mol_charset_ucf_decode(buffer, mode = tiny_mode) {
+        let text = '';
+        let pos = 0;
+        let page_offset = 0;
+        const read_code = () => {
+            let code = buffer[pos++];
+            if (code > 0x80)
+                code = ((mode + code) & 0x7F) | 0x80;
+            return code;
+        };
+        const read_remap = () => {
+            let code = read_code();
+            if (code >= 0x80)
+                code = ascii_set[code - 0x80];
+            return code;
+        };
+        while (pos < buffer.length) {
+            let code = read_code();
+            if (code < full_mode) {
+                if (mode === tiny_mode) {
+                    if (code > 0x80) {
+                        code = diacr_set[code - 0x080] | (6 << 7);
+                    }
+                }
+                else if (!ascii_map[code]) {
+                    if (code >= 0x80)
+                        code = ascii_set[code - 0x80];
+                    if (mode < tiny_mode)
+                        code |= read_remap() << 7;
+                    if (mode === full_mode)
+                        code |= read_remap() << 14;
+                    code += page_offset;
+                }
+                text += String.fromCodePoint(code);
+            }
+            else if (code >= tiny_mode) {
+                mode = code;
+                page_offset = (mode - tiny_mode) << 7;
+            }
+            else if (code === full_mode) {
+                mode = code;
+                page_offset = 0;
+            }
+            else {
+                mode = code;
+                page_offset = ((mode - wide_mode) << 14) + wide_offset;
+            }
+        }
+        return text;
+    }
+    $.$mol_charset_ucf_decode = $mol_charset_ucf_decode;
 })($ || ($ = {}));
 
 ;
@@ -7065,45 +7154,6 @@ var $;
         return result;
     }
     $.$mol_bigint_decode = $mol_bigint_decode;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    const fast_char = `0123456789.,:;()?!-'" \n`;
-    function $mol_charset_ucf_decode(buffer, mode = 0x9C) {
-        let text = '';
-        let pos = 0;
-        let page_offset = 0;
-        while (pos < buffer.length) {
-            let code = buffer[pos++];
-            if (code < 0x80) {
-                if (mode < 0x9C)
-                    code |= buffer[pos++] << 7;
-                if (mode === 0x97)
-                    code |= buffer[pos++] << 15;
-                text += String.fromCodePoint(page_offset + code);
-            }
-            else if (code < 0x97) {
-                text += fast_char[code - 0x80];
-            }
-            else if (code >= 0x9C) {
-                mode = code;
-                page_offset = (mode - 0x9C) << 7;
-            }
-            else if (code === 0x97) {
-                mode = code;
-                page_offset = 0;
-            }
-            else {
-                mode = code;
-                page_offset = ((mode - 0x98) << 15) + 0x20_00;
-            }
-        }
-        return text;
-    }
-    $.$mol_charset_ucf_decode = $mol_charset_ucf_decode;
 })($ || ($ = {}));
 
 ;
@@ -14678,15 +14728,51 @@ var $;
 (function ($_1) {
     var $$;
     (function ($$) {
+        function check(text, bytes) {
+            const ideal = new Uint8Array(bytes);
+            const actual = $mol_charset_ucf_encode(text);
+            $mol_assert_equal($mol_charset_ucf_decode(actual), text);
+            $mol_assert_equal(actual, ideal);
+        }
         $mol_test({
-            "Complex UCF encoding"($) {
-                $mol_assert_equal($mol_charset_ucf_encode('hi мир, 美しい 世界 🏴‍☠\t\n'), new Uint8Array([
-                    0x68, 0x69, 0x20,
-                    0xA4, 0x3C, 0x38, 0x40, 0x8B, 0x95,
-                    0x98, 0x0E, 0xBF, 0xFC, 0x57, 0x44, 0x95,
-                    0x98, 0x16, 0x5C, 0x4C, 0xAA, 0x95,
-                    0x9B, 0x74, 0xA7, 0xDC, 0x0D, 0xE8, 0x20, 0x9C, 0x09, 0x0A,
-                ]));
+            "Full ASCII compatible"($) {
+                check('hi', [0x68, 0x69]);
+            },
+            "1B ASCII with diacritic"($) {
+                check('allo\u0302', [0x61, 0x6C, 0x6C, 0x6F, 0xEA]);
+            },
+            "1B Cyrillic"($) {
+                check('мир', [0x88, 0x3C, 0xE2, 0x40, 0xF8]);
+            },
+            "1B Cyrillic with nummbers and punctuation"($) {
+                check('м.1', [0x88, 0x3C, 0x2E, 0x31, 0xF8]);
+            },
+            "2B Kanji"($) {
+                check('美', [0xF9, 0x0E, 0x63, 0x87]);
+            },
+            "3B rare Kanji"($) {
+                check('𲎯', [0xF7, 0x2F, 0x47, 0x0C, 0x89]);
+            },
+            "1B Kana"($) {
+                check('しい', [0xE0, 0x57, 0x44, 0xA0]);
+            },
+            "2B Emoji"($) {
+                check('🏴', [0xFF, 0x74, 0x4B, 0x81]);
+            },
+            "2B Emoji with 1B modifiers"($) {
+                check('🏴‍☠', [0xFF, 0x74, 0x4B, 0xC1, 0x0D, 0x8C, 0xA9, 0xB4]);
+            },
+            "2B Emoji with 3B Tag"($) {
+                check('🏴\u{E007F}', [0xFF, 0x74, 0x4B, 0xF8, 0x7F, 0x00, 0xF3, 0x89]);
+            },
+            "Mixed scripts"($) {
+                check('allô 美しい мир, 🏴‍☠\n', [
+                    0x61, 0x6C, 0x6C, 0x6F, 0xEA, 0x20,
+                    0xF9, 0x0E, 0x63, 0xE7, 0x57, 0x44, 0x20,
+                    0xA8, 0x3C, 0xE2, 0x40, 0x2C, 0x20,
+                    0xF7, 0x74, 0x4B, 0xC1, 0x0D, 0x8C, 0xA9, 0x0A,
+                    0xB4,
+                ]);
             },
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
@@ -14727,26 +14813,6 @@ var $;
             "8 byte int"($) {
                 $mol_assert_equal($mol_bigint_decode(new Uint8Array(new BigInt64Array([128n * 256n ** 7n - 1n]).buffer)), 128n * 256n ** 7n - 1n);
                 $mol_assert_equal($mol_bigint_decode(new Uint8Array(new BigInt64Array([-128n * 256n ** 7n]).buffer)), -128n * 256n ** 7n);
-            },
-        });
-    })($$ = $_1.$$ || ($_1.$$ = {}));
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($_1) {
-    var $$;
-    (function ($$) {
-        $mol_test({
-            "Complex UCF eecoding"($) {
-                $mol_assert_equal('hi мир, 美しい 世界 🏴‍☠\t\n', $mol_charset_ucf_decode(new Uint8Array([
-                    0x68, 0x69, 0x20,
-                    0xA4, 0x3C, 0x38, 0x40, 0x8B, 0x95,
-                    0x98, 0x0E, 0xBF, 0xFC, 0x57, 0x44, 0x95,
-                    0x98, 0x16, 0x5C, 0x4C, 0xAA, 0x95,
-                    0x9B, 0x74, 0xA7, 0xDC, 0x0D, 0xE8, 0x20, 0x9C, 0x09, 0x0A,
-                ])));
             },
         });
     })($$ = $_1.$$ || ($_1.$$ = {}));
@@ -14870,11 +14936,11 @@ var $;
             },
             "vary pack text"($) {
                 check(['foo'], [text | 3, ...str('foo')]);
-                check(['абв'], [text | 4, ...str('абв')]);
+                check(['абв'], [text | 5, ...str('абв')]);
                 const long_lat = 'abcdefghijklmnopqrst';
                 check([long_lat], [text | L1, 20, ...str(long_lat)]);
                 const long_cyr = 'абвгдеёжзийклмнопрст';
-                check([long_cyr], [text | L1, 21, ...str(long_cyr)]);
+                check([long_cyr], [text | L1, 22, ...str(long_cyr)]);
             },
             "vary pack dedup text"($) {
                 check([["f", "f"]], [list | 2, text | 1, ...str('f'), link | 0]);
