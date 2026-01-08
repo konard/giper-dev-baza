@@ -1,7 +1,7 @@
 services:
 
   baza:
-    image: ghcr.io/giper-dev/baza:latest
+    image: ghcr.io/giper-dev/baza:master
     environment:
       DOMAIN: ${DOMAIN}
     logging:
