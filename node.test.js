@@ -6606,7 +6606,7 @@ var $;
                 this.summ = summ;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(' ', $giper_baza_time_dump(this.time), ' +', this.tick, ' %', this.summ));
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(' ', $giper_baza_time_dump(this.time), ' &', this.tick, ' %', this.summ));
         }
     }
     $.$giper_baza_face = $giper_baza_face;
@@ -9502,7 +9502,7 @@ var $;
             return `seal:${this.lord()}/${$giper_baza_time_dump(this.time())} #${this.tick()}`;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' ✍ ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', $mol_dev_format_auto(this.hash_list()));
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' ✍ ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', $mol_dev_format_auto(this.hash_list()));
         }
     }
     $.$giper_baza_unit_seal = $giper_baza_unit_seal;
@@ -9650,7 +9650,7 @@ var $;
                 : $giper_baza_rank_tier.post;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 📦 ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', this.lead().str || '__knot__', $mol_dev_format_shade('\\'), $mol_dev_format_accent(this.head().str || '__root__'), $mol_dev_format_shade('/'), this.self().str || '__spec__', ' ', {
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 📦 ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', this.lead().str || '__knot__', $mol_dev_format_shade('\\'), $mol_dev_format_accent(this.head().str || '__root__'), $mol_dev_format_shade('/'), this.self().str || '__spec__', ' ', {
                 term: '💼',
                 solo: '1️⃣',
                 vals: '🎹',
@@ -9733,7 +9733,7 @@ var $;
             return $giper_baza_rank_tier.rule;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 🏅', ' ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' 👾', $mol_dev_format_accent(this.mate().str || '______anyone_____'), this.code().some(v => v) ? ' 🔐' : ' 👀', $giper_baza_rank_tier[this.tier()], ':', this.rate().toString(16).toUpperCase());
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 🏅', ' ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' 👾', $mol_dev_format_accent(this.mate().str || '______anyone_____'), this.code().some(v => v) ? ' 🔐' : ' 👀', $giper_baza_rank_tier[this.tier()], ':', this.rate().toString(16).toUpperCase());
         }
     }
     __decorate([
@@ -10931,9 +10931,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $giper_baza_stat_series extends $giper_baza_dict_to($giper_baza_atom_real) {
-        tick(key, val) {
-            this.key(key, null).val(this.initial() + val);
+    class $giper_baza_stat_series extends $giper_baza_atom_list {
+        tick(key, val, count) {
+            let vals = this.values().slice();
+            while (vals.length < count)
+                vals.push(0);
+            vals[key] = val;
+            vals = [...vals.slice(key + 1), ...vals.slice(0, key + 1)];
+            for (let i = 1; i < count; ++i)
+                if (vals[i] < vals[i - 1])
+                    vals[i] = vals[i - 1];
+            vals = [...vals.slice(-1 - key), ...vals.slice(0, -1 - key)];
+            this.val(vals);
         }
         _initial;
         initial() {
@@ -10941,10 +10950,14 @@ var $;
                 ?? (this._initial = this.max());
         }
         max() {
-            return Math.max(...this.values());
+            let max = 0;
+            for (const val of this.values())
+                if (val > max)
+                    max = val;
+            return max;
         }
         values() {
-            return this.nodes($giper_baza_atom_real).map(key => key.val());
+            return (this.val() ?? []);
         }
     }
     __decorate([
@@ -10956,9 +10969,6 @@ var $;
     __decorate([
         $mol_mem
     ], $giper_baza_stat_series.prototype, "max", null);
-    __decorate([
-        $mol_mem
-    ], $giper_baza_stat_series.prototype, "values", null);
     $.$giper_baza_stat_series = $giper_baza_stat_series;
 })($ || ($ = {}));
 
@@ -10971,7 +10981,7 @@ var $;
         Minutes: $giper_baza_stat_series,
         Hours: $giper_baza_stat_series,
         Days: $giper_baza_stat_series,
-        Years: $giper_baza_stat_series,
+        Months: $giper_baza_stat_series,
     }) {
         _last_instant = 0;
         tick_instant(val) {
@@ -10979,21 +10989,16 @@ var $;
         }
         tick_integral(val) {
             let now = new $mol_time_moment;
-            const second = Math.floor(now.second);
-            const minute = now.minute;
-            const hour = now.hour;
-            const from_ny = new $mol_time_interval({ start: { year: now.year, month: 0, day: 0 }, end: now });
-            const day = Math.floor(from_ny.duration.count('P1D'));
-            const year = now.year;
-            this.Seconds(null).tick(second, val);
-            this.Minutes(null).tick(minute, val);
-            this.Hours(null).tick(hour, val);
-            this.Days(null).tick(day, val);
-            this.Years(null).tick(year, val);
+            this.Seconds(null).tick(Math.floor(now.second), val, 60);
+            this.Minutes(null).tick(now.minute, val, 60);
+            this.Hours(null).tick(now.hour, val, 24);
+            this.Days(null).tick(now.day, val, 31);
+            this.Months(null).tick(now.month, val, 12);
         }
         series() {
             function pick(Series, length, range) {
-                let series = Array.from({ length }, (_, i) => Series.key(i)?.val() ?? 0);
+                const values = Series?.values() ?? [0];
+                let series = Array.from({ length }, (_, i) => values[i]);
                 let start = 0;
                 let max = 0;
                 for (let i = 0; i < series.length; ++i) {
@@ -11017,11 +11022,12 @@ var $;
                 });
                 return series;
             }
-            let days = pick(this.Days(), 365, 60 * 60 * 24);
-            let hours = pick(this.Hours(), 24, 60 * 60);
-            let minutes = pick(this.Minutes(), 60, 60);
-            let seconds = pick(this.Seconds(), 60, 1);
-            return [...days, ...hours, ...minutes, ...seconds].reverse();
+            const months = pick(this.Days(), 12, 60 * 60 * 24 * 31);
+            const days = pick(this.Days(), 31, 60 * 60 * 24);
+            const hours = pick(this.Hours(), 24, 60 * 60);
+            const minutes = pick(this.Minutes(), 60, 60);
+            const seconds = pick(this.Seconds(), 60, 1);
+            return [...months, ...days, ...hours, ...minutes, ...seconds].reverse();
         }
     }
     __decorate([
@@ -11090,15 +11096,15 @@ var $;
             this.$.$mol_state_time.now(1000);
             this.uptime(new $mol_time_duration({ second: Math.floor(process.uptime()) }).normal);
             const res = process.resourceUsage();
-            this.Cpu_user(null).tick_integral(res.userCPUTime / 1e6);
-            this.Cpu_system(null).tick_integral(res.systemCPUTime / 1e6);
+            this.Cpu_user(null).tick_integral(Math.ceil(res.userCPUTime / 1e4));
+            this.Cpu_system(null).tick_integral(Math.ceil(res.systemCPUTime / 1e4));
             this.Fs_reads(null).tick_integral(res.fsRead);
             this.Fs_writes(null).tick_integral(res.fsWrite);
             const mem_total = $node.os.totalmem();
-            this.Mem_used(null).tick_instant((res.maxRSS - res.sharedMemorySize) * 1024 / mem_total * 100);
-            this.Mem_free(null).tick_instant($node.os.freemem() / mem_total * 100);
+            this.Mem_used(null).tick_instant(Math.ceil((res.maxRSS - res.sharedMemorySize) * 1024 / mem_total * 100));
+            this.Mem_free(null).tick_instant(Math.floor($node.os.freemem() / mem_total * 100));
             const fs = $node.fs.statfsSync('.');
-            this.Fs_free(null).tick_instant(Number(fs.bfree) / Number(fs.blocks) * 100);
+            this.Fs_free(null).tick_instant(Math.floor(Number(fs.bfree) / Number(fs.blocks) * 100));
             const masters = $mol_wire_sync(this.$.$giper_baza_glob.yard()).masters().length;
             this.Port_masters(null).tick_instant(masters);
             const slaves = $mol_wire_sync(this.$.$giper_baza_glob.yard()).ports().length - masters;
@@ -11218,8 +11224,11 @@ var $;
         _auto() {
             this._stat_update();
         }
+        _home() {
+            return this.$.$giper_baza_glob.home($giper_baza_app_home);
+        }
         _stat_update() {
-            const home = this.$.$giper_baza_glob.home($giper_baza_app_home);
+            const home = this._home();
             home.init();
             home.tick();
             const stat = home.stat(null);
@@ -11235,6 +11244,9 @@ var $;
     __decorate([
         $mol_memo.method
     ], $giper_baza_app_node.prototype, "link", null);
+    __decorate([
+        $mol_mem
+    ], $giper_baza_app_node.prototype, "_home", null);
     __decorate([
         $mol_mem
     ], $giper_baza_app_node.prototype, "_stat_update", null);

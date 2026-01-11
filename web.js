@@ -4125,7 +4125,7 @@ var $;
                 this.summ = summ;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(' ', $giper_baza_time_dump(this.time), ' +', this.tick, ' %', this.summ));
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(' ', $giper_baza_time_dump(this.time), ' &', this.tick, ' %', this.summ));
         }
     }
     $.$giper_baza_face = $giper_baza_face;
@@ -7910,7 +7910,7 @@ var $;
             return $giper_baza_rank_tier.rule;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 🏅', ' ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' 👾', $mol_dev_format_accent(this.mate().str || '______anyone_____'), this.code().some(v => v) ? ' 🔐' : ' 👀', $giper_baza_rank_tier[this.tier()], ':', this.rate().toString(16).toUpperCase());
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 🏅', ' ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' 👾', $mol_dev_format_accent(this.mate().str || '______anyone_____'), this.code().some(v => v) ? ' 🔐' : ' 👀', $giper_baza_rank_tier[this.tier()], ':', this.rate().toString(16).toUpperCase());
         }
     }
     __decorate([
@@ -8003,7 +8003,7 @@ var $;
             return `seal:${this.lord()}/${$giper_baza_time_dump(this.time())} #${this.tick()}`;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' ✍ ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', $mol_dev_format_auto(this.hash_list()));
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' ✍ ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', $mol_dev_format_auto(this.hash_list()));
         }
     }
     $.$giper_baza_unit_seal = $giper_baza_unit_seal;
@@ -8503,7 +8503,7 @@ var $;
                 : $giper_baza_rank_tier.post;
         }
         [$mol_dev_format_head]() {
-            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 📦 ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' +', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', this.lead().str || '__knot__', $mol_dev_format_shade('\\'), $mol_dev_format_accent(this.head().str || '__root__'), $mol_dev_format_shade('/'), this.self().str || '__spec__', ' ', {
+            return $mol_dev_format_span({}, $mol_dev_format_native(this), ' 👾', $mol_dev_format_auto(this.lord()), ' 📦 ', $mol_dev_format_shade(this.moment().toString('YYYY-MM-DD hh:mm:ss'), ' &', this.tick()), ' #', $mol_dev_format_auto(this.hash()), ' ', this.lead().str || '__knot__', $mol_dev_format_shade('\\'), $mol_dev_format_accent(this.head().str || '__root__'), $mol_dev_format_shade('/'), this.self().str || '__spec__', ' ', {
                 term: '💼',
                 solo: '1️⃣',
                 vals: '🎹',
@@ -20339,6 +20339,168 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$giper_baza_land_rights) = class $giper_baza_land_rights extends ($.$mol_list) {
+		add_key(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		add_commit(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Add_key(){
+			const obj = new this.$.$mol_string();
+			(obj.hint) = () => ((this.$.$mol_locale.text("$giper_baza_land_rights_Add_key_hint")));
+			(obj.value) = (next) => ((this.add_key(next)));
+			(obj.submit) = (next) => ((this.add_commit(next)));
+			return obj;
+		}
+		Add_commit_icon(){
+			const obj = new this.$.$mol_icon_plus();
+			return obj;
+		}
+		Add_commit(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.click) = (next) => ((this.add_commit(next)));
+			(obj.sub) = () => ([(this.Add_commit_icon())]);
+			return obj;
+		}
+		Add(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Add_key()), (this.Add_commit())]);
+			return obj;
+		}
+		peer_id(id){
+			return "";
+		}
+		Gift_avatar(id){
+			const obj = new this.$.$mol_avatar();
+			(obj.id) = () => ((this.peer_id(id)));
+			return obj;
+		}
+		peer_name(id){
+			return "";
+		}
+		Gift_name(id){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.peer_name(id)));
+			return obj;
+		}
+		Gift_peer(id){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Gift_avatar(id)), (this.Gift_name(id))]);
+			return obj;
+		}
+		gift_rank(id, next){
+			if(next !== undefined) return next;
+			return "deny";
+		}
+		Gift_rank(id){
+			const obj = new this.$.$mol_select();
+			(obj.value) = (next) => ((this.gift_rank(id, next)));
+			(obj.dictionary) = () => ({
+				"deny": (this.$.$mol_locale.text("$giper_baza_land_rights_Gift_rank_dictionary_deny")), 
+				"read": (this.$.$mol_locale.text("$giper_baza_land_rights_Gift_rank_dictionary_read")), 
+				"join": (this.$.$mol_locale.text("$giper_baza_land_rights_Gift_rank_dictionary_join")), 
+				"post": (this.$.$mol_locale.text("$giper_baza_land_rights_Gift_rank_dictionary_post")), 
+				"rule": (this.$.$mol_locale.text("$giper_baza_land_rights_Gift_rank_dictionary_rule"))
+			});
+			return obj;
+		}
+		Gift(id){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Gift_peer(id)), (this.Gift_rank(id))]);
+			return obj;
+		}
+		gifts(){
+			return [(this.Gift("0"))];
+		}
+		land(){
+			const obj = new this.$.$giper_baza_land();
+			return obj;
+		}
+		rows(){
+			return [(this.Add()), ...(this.gifts())];
+		}
+	};
+	($mol_mem(($.$giper_baza_land_rights.prototype), "add_key"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "add_commit"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "Add_key"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "Add_commit_icon"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "Add_commit"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "Add"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "Gift_avatar"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "Gift_name"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "Gift_peer"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "gift_rank"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "Gift_rank"));
+	($mol_mem_key(($.$giper_baza_land_rights.prototype), "Gift"));
+	($mol_mem(($.$giper_baza_land_rights.prototype), "land"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $giper_baza_land_rights extends $.$giper_baza_land_rights {
+            gifts() {
+                return [...this.land()._gift.keys()]
+                    .map(link => this.Gift(new $giper_baza_link(link)));
+            }
+            peer_id(lord) {
+                return lord.str;
+            }
+            peer_name(lord) {
+                return this.$.$giper_baza_glob.Node(lord, $giper_baza_entity).title() || lord.str;
+            }
+            gift_rank(lord, next) {
+                return $giper_baza_rank_tier[this.land().lord_rank(lord, next && $giper_baza_rank_make(next, 'just')) & 0b0_1111_0000];
+            }
+            add_commit() {
+                const auth = $giper_baza_auth_pass.from(this.add_key());
+                this.land().give(auth, $giper_baza_rank_read);
+                this.add_key('');
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $giper_baza_land_rights.prototype, "gifts", null);
+        __decorate([
+            $mol_mem_key
+        ], $giper_baza_land_rights.prototype, "gift_rank", null);
+        $$.$giper_baza_land_rights = $giper_baza_land_rights;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($giper_baza_land_rights, {
+            Gift_peer: {
+                flex: {
+                    grow: 1,
+                },
+                padding: $mol_gap.text,
+                gap: $mol_gap.text,
+            },
+            Gift_rank: {
+                flex: {
+                    grow: 0,
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
 	($.$mol_icon_source) = class $mol_icon_source extends ($.$mol_icon) {
 		path(){
 			return "M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z";
@@ -20472,6 +20634,16 @@ var $;
 			(obj.Content) = () => ((this.Raw_content()));
 			return obj;
 		}
+		Rights_control(){
+			const obj = new this.$.$giper_baza_land_rights();
+			(obj.land) = () => ((this.land()));
+			return obj;
+		}
+		Rights(){
+			const obj = new this.$.$mol_labeler();
+			(obj.Content) = () => ((this.Rights_control()));
+			return obj;
+		}
 		Fork_icon(){
 			const obj = new this.$.$mol_icon_source_fork();
 			return obj;
@@ -20526,7 +20698,11 @@ var $;
 			return [(this.Encrypted()), (this.Close())];
 		}
 		body(){
-			return [(this.Flex()), (this.Raw())];
+			return [
+				(this.Flex()), 
+				(this.Raw()), 
+				(this.Rights())
+			];
 		}
 		foot(){
 			return [(this.Fork()), (this.Dumping())];
@@ -20540,6 +20716,8 @@ var $;
 	($mol_mem(($.$giper_baza_land_page.prototype), "Raw_meta"));
 	($mol_mem(($.$giper_baza_land_page.prototype), "Raw_content"));
 	($mol_mem(($.$giper_baza_land_page.prototype), "Raw"));
+	($mol_mem(($.$giper_baza_land_page.prototype), "Rights_control"));
+	($mol_mem(($.$giper_baza_land_page.prototype), "Rights"));
 	($mol_mem(($.$giper_baza_land_page.prototype), "Fork_icon"));
 	($mol_mem(($.$giper_baza_land_page.prototype), "fork"));
 	($mol_mem(($.$giper_baza_land_page.prototype), "Fork"));
@@ -21147,9 +21325,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $giper_baza_stat_series extends $giper_baza_dict_to($giper_baza_atom_real) {
-        tick(key, val) {
-            this.key(key, null).val(this.initial() + val);
+    class $giper_baza_stat_series extends $giper_baza_atom_list {
+        tick(key, val, count) {
+            let vals = this.values().slice();
+            while (vals.length < count)
+                vals.push(0);
+            vals[key] = val;
+            vals = [...vals.slice(key + 1), ...vals.slice(0, key + 1)];
+            for (let i = 1; i < count; ++i)
+                if (vals[i] < vals[i - 1])
+                    vals[i] = vals[i - 1];
+            vals = [...vals.slice(-1 - key), ...vals.slice(0, -1 - key)];
+            this.val(vals);
         }
         _initial;
         initial() {
@@ -21157,10 +21344,14 @@ var $;
                 ?? (this._initial = this.max());
         }
         max() {
-            return Math.max(...this.values());
+            let max = 0;
+            for (const val of this.values())
+                if (val > max)
+                    max = val;
+            return max;
         }
         values() {
-            return this.nodes($giper_baza_atom_real).map(key => key.val());
+            return (this.val() ?? []);
         }
     }
     __decorate([
@@ -21172,9 +21363,6 @@ var $;
     __decorate([
         $mol_mem
     ], $giper_baza_stat_series.prototype, "max", null);
-    __decorate([
-        $mol_mem
-    ], $giper_baza_stat_series.prototype, "values", null);
     $.$giper_baza_stat_series = $giper_baza_stat_series;
 })($ || ($ = {}));
 
@@ -21187,7 +21375,7 @@ var $;
         Minutes: $giper_baza_stat_series,
         Hours: $giper_baza_stat_series,
         Days: $giper_baza_stat_series,
-        Years: $giper_baza_stat_series,
+        Months: $giper_baza_stat_series,
     }) {
         _last_instant = 0;
         tick_instant(val) {
@@ -21195,21 +21383,16 @@ var $;
         }
         tick_integral(val) {
             let now = new $mol_time_moment;
-            const second = Math.floor(now.second);
-            const minute = now.minute;
-            const hour = now.hour;
-            const from_ny = new $mol_time_interval({ start: { year: now.year, month: 0, day: 0 }, end: now });
-            const day = Math.floor(from_ny.duration.count('P1D'));
-            const year = now.year;
-            this.Seconds(null).tick(second, val);
-            this.Minutes(null).tick(minute, val);
-            this.Hours(null).tick(hour, val);
-            this.Days(null).tick(day, val);
-            this.Years(null).tick(year, val);
+            this.Seconds(null).tick(Math.floor(now.second), val, 60);
+            this.Minutes(null).tick(now.minute, val, 60);
+            this.Hours(null).tick(now.hour, val, 24);
+            this.Days(null).tick(now.day, val, 31);
+            this.Months(null).tick(now.month, val, 12);
         }
         series() {
             function pick(Series, length, range) {
-                let series = Array.from({ length }, (_, i) => Series.key(i)?.val() ?? 0);
+                const values = Series?.values() ?? [0];
+                let series = Array.from({ length }, (_, i) => values[i]);
                 let start = 0;
                 let max = 0;
                 for (let i = 0; i < series.length; ++i) {
@@ -21233,11 +21416,12 @@ var $;
                 });
                 return series;
             }
-            let days = pick(this.Days(), 365, 60 * 60 * 24);
-            let hours = pick(this.Hours(), 24, 60 * 60);
-            let minutes = pick(this.Minutes(), 60, 60);
-            let seconds = pick(this.Seconds(), 60, 1);
-            return [...days, ...hours, ...minutes, ...seconds].reverse();
+            const months = pick(this.Days(), 12, 60 * 60 * 24 * 31);
+            const days = pick(this.Days(), 31, 60 * 60 * 24);
+            const hours = pick(this.Hours(), 24, 60 * 60);
+            const minutes = pick(this.Minutes(), 60, 60);
+            const seconds = pick(this.Seconds(), 60, 1);
+            return [...months, ...days, ...hours, ...minutes, ...seconds].reverse();
         }
     }
     __decorate([
@@ -21279,15 +21463,15 @@ var $;
             this.$.$mol_state_time.now(1000);
             this.uptime(new $mol_time_duration({ second: Math.floor(process.uptime()) }).normal);
             const res = process.resourceUsage();
-            this.Cpu_user(null).tick_integral(res.userCPUTime / 1e6);
-            this.Cpu_system(null).tick_integral(res.systemCPUTime / 1e6);
+            this.Cpu_user(null).tick_integral(Math.ceil(res.userCPUTime / 1e4));
+            this.Cpu_system(null).tick_integral(Math.ceil(res.systemCPUTime / 1e4));
             this.Fs_reads(null).tick_integral(res.fsRead);
             this.Fs_writes(null).tick_integral(res.fsWrite);
             const mem_total = $node.os.totalmem();
-            this.Mem_used(null).tick_instant((res.maxRSS - res.sharedMemorySize) * 1024 / mem_total * 100);
-            this.Mem_free(null).tick_instant($node.os.freemem() / mem_total * 100);
+            this.Mem_used(null).tick_instant(Math.ceil((res.maxRSS - res.sharedMemorySize) * 1024 / mem_total * 100));
+            this.Mem_free(null).tick_instant(Math.floor($node.os.freemem() / mem_total * 100));
             const fs = $node.fs.statfsSync('.');
-            this.Fs_free(null).tick_instant(Number(fs.bfree) / Number(fs.blocks) * 100);
+            this.Fs_free(null).tick_instant(Math.floor(Number(fs.bfree) / Number(fs.blocks) * 100));
             const masters = $mol_wire_sync(this.$.$giper_baza_glob.yard()).masters().length;
             this.Port_masters(null).tick_instant(masters);
             const slaves = $mol_wire_sync(this.$.$giper_baza_glob.yard()).ports().length - masters;
@@ -23961,10 +24145,10 @@ var $;
                 return `${status} ${uptime}`;
             }
             cpu_user() {
-                return this.stat()?.Cpu_user()?.series().map(v => 100 * v) ?? [];
+                return this.stat()?.Cpu_user()?.series() ?? [];
             }
             cpu_system() {
-                return this.stat()?.Cpu_system()?.series().map(v => 100 * v) ?? [];
+                return this.stat()?.Cpu_system()?.series() ?? [];
             }
             mem_used() {
                 return this.stat()?.Mem_used()?.series() ?? [];
@@ -23995,8 +24179,10 @@ var $;
                     times.push(`${i} mins ago`);
                 for (let i = 1; i < 23; ++i)
                     times.push(`${i} hours ago`);
-                for (let i = 1; i < 364; ++i)
+                for (let i = 1; i < 31; ++i)
                     times.push(`${i} days ago`);
+                for (let i = 1; i < 12; ++i)
+                    times.push(`${i} months ago`);
                 return times;
             }
         }

@@ -8976,6 +8976,110 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
+	type $mol_string__hint_giper_baza_land_rights_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_string['hint'] >
+	>
+	type $mol_string__value_giper_baza_land_rights_2 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['add_key'] >
+		,
+		ReturnType< $mol_string['value'] >
+	>
+	type $mol_string__submit_giper_baza_land_rights_3 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['add_commit'] >
+		,
+		ReturnType< $mol_string['submit'] >
+	>
+	type $mol_button_minor__click_giper_baza_land_rights_4 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['add_commit'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_button_minor__sub_giper_baza_land_rights_5 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_button_minor['sub'] >
+	>
+	type $mol_view__sub_giper_baza_land_rights_6 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_avatar__id_giper_baza_land_rights_7 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['peer_id'] >
+		,
+		ReturnType< $mol_avatar['id'] >
+	>
+	type $mol_paragraph__title_giper_baza_land_rights_8 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['peer_name'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_view__sub_giper_baza_land_rights_9 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_select__value_giper_baza_land_rights_10 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_rights['gift_rank'] >
+		,
+		ReturnType< $mol_select['value'] >
+	>
+	type $mol_select__dictionary_giper_baza_land_rights_11 = $mol_type_enforce<
+		({ 
+			'deny': string,
+			'read': string,
+			'join': string,
+			'post': string,
+			'rule': string,
+		}) 
+		,
+		ReturnType< $mol_select['dictionary'] >
+	>
+	type $mol_view__sub_giper_baza_land_rights_12 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	export class $giper_baza_land_rights extends $mol_list {
+		add_key( next?: string ): string
+		add_commit( next?: any ): any
+		Add_key( ): $mol_string
+		Add_commit_icon( ): $mol_icon_plus
+		Add_commit( ): $mol_button_minor
+		Add( ): $mol_view
+		peer_id( id: any): string
+		Gift_avatar( id: any): $mol_avatar
+		peer_name( id: any): string
+		Gift_name( id: any): $mol_paragraph
+		Gift_peer( id: any): $mol_view
+		gift_rank( id: any, next?: string ): string
+		Gift_rank( id: any): $mol_select
+		Gift( id: any): $mol_view
+		gifts( ): readonly(any)[]
+		land( ): $giper_baza_land
+		rows( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=rights.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $giper_baza_land_rights extends $.$giper_baza_land_rights {
+        gifts(): $mol_view[];
+        peer_id(lord: $giper_baza_link): string;
+        peer_name(lord: $giper_baza_link): string;
+        gift_rank(lord: $giper_baza_link, next?: keyof typeof $giper_baza_rank_tier): string;
+        add_commit(): void;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
 	export class $mol_icon_source extends $mol_icon {
 		path( ): string
 	}
@@ -9120,42 +9224,52 @@ declare namespace $ {
 		,
 		ReturnType< $mol_labeler['Content'] >
 	>
-	type $mol_button_minor__hint_giper_baza_land_page_12 = $mol_type_enforce<
+	type $giper_baza_land_rights__land_giper_baza_land_page_12 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_page['land'] >
+		,
+		ReturnType< $giper_baza_land_rights['land'] >
+	>
+	type $mol_labeler__Content_giper_baza_land_page_13 = $mol_type_enforce<
+		ReturnType< $giper_baza_land_page['Rights_control'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_button_minor__hint_giper_baza_land_page_14 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['hint'] >
 	>
-	type $mol_button_minor__sub_giper_baza_land_page_13 = $mol_type_enforce<
+	type $mol_button_minor__sub_giper_baza_land_page_15 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_button_minor['sub'] >
 	>
-	type $mol_button_minor__click_giper_baza_land_page_14 = $mol_type_enforce<
+	type $mol_button_minor__click_giper_baza_land_page_16 = $mol_type_enforce<
 		ReturnType< $giper_baza_land_page['fork'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_view__sub_giper_baza_land_page_15 = $mol_type_enforce<
+	type $mol_view__sub_giper_baza_land_page_17 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_button_download__hint_giper_baza_land_page_16 = $mol_type_enforce<
+	type $mol_button_download__hint_giper_baza_land_page_18 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_download['hint'] >
 	>
-	type $mol_button_download__blob_giper_baza_land_page_17 = $mol_type_enforce<
+	type $mol_button_download__blob_giper_baza_land_page_19 = $mol_type_enforce<
 		ReturnType< $giper_baza_land_page['dump'] >
 		,
 		ReturnType< $mol_button_download['blob'] >
 	>
-	type $mol_button_download__file_name_giper_baza_land_page_18 = $mol_type_enforce<
+	type $mol_button_download__file_name_giper_baza_land_page_20 = $mol_type_enforce<
 		ReturnType< $giper_baza_land_page['dump_name'] >
 		,
 		ReturnType< $mol_button_download['file_name'] >
 	>
-	type $mol_view__sub_giper_baza_land_page_19 = $mol_type_enforce<
+	type $mol_view__sub_giper_baza_land_page_21 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
@@ -9171,6 +9285,8 @@ declare namespace $ {
 		Raw_meta( ): $giper_baza_node_dump
 		Raw_content( ): $mol_list
 		Raw( ): $mol_labeler
+		Rights_control( ): $giper_baza_land_rights
+		Rights( ): $mol_labeler
 		Fork_icon( ): $mol_icon_source_fork
 		fork( next?: any ): any
 		Fork( ): $mol_button_minor
@@ -9425,69 +9541,13 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    const $giper_baza_stat_series_base: {
-        new (): {
-            Value: typeof $giper_baza_atom_real;
-            key(key: $giper_baza_vary_type, auto?: any): $giper_baza_atom_real;
-            keys(): readonly $giper_baza_vary_type[];
-            dive<Node_1 extends typeof $giper_baza_node>(key: $giper_baza_vary_type, Node: Node_1, auto?: any): InstanceType<Node_1> | null;
-            [$mol_dev_format_head](): any[];
-            items_vary(next?: readonly $giper_baza_vary_type[], tag?: keyof typeof $giper_baza_unit_sand_tag): readonly $giper_baza_vary_type[];
-            splice(next: readonly $giper_baza_vary_type[], from?: number, to?: number, tag?: keyof typeof $giper_baza_unit_sand_tag): void;
-            find(vary: $giper_baza_vary_type): $giper_baza_unit_sand | null;
-            has(vary: $giper_baza_vary_type, next?: boolean, tag?: keyof typeof $giper_baza_unit_sand_tag): boolean;
-            add(vary: $giper_baza_vary_type, tag?: keyof typeof $giper_baza_unit_sand_tag): void;
-            cut(vary: $giper_baza_vary_type): void;
-            move(from: number, to: number): void;
-            wipe(seat: number): void;
-            node_make<Node_1 extends typeof $giper_baza_node>(Node: Node_1, vary: $giper_baza_vary_type, tag?: keyof typeof $giper_baza_unit_sand_tag): InstanceType<Node_1>;
-            land(): $giper_baza_land;
-            head(): $giper_baza_link;
-            land_link(): $giper_baza_link;
-            link(): $giper_baza_link;
-            toJSON(): string;
-            cast<Node_1 extends typeof $giper_baza_node>(Node: Node_1): InstanceType<Node_1>;
-            nodes<Node_1 extends typeof $giper_baza_node>(Node: Node_1 | null): readonly InstanceType<Node_1>[];
-            units(): $giper_baza_unit_sand[];
-            units_of(peer: $giper_baza_link | null): $giper_baza_unit_sand[];
-            filled(): boolean;
-            can_change(): boolean;
-            last_change(): $mol_time_moment | null;
-            authors(): $giper_baza_auth_pass[];
-            get $(): $;
-            set $(next: $);
-            destructor(): void;
-            toString(): string;
-            [Symbol.toStringTag]: string;
-            [$mol_ambient_ref]: $;
-            [Symbol.dispose](): void;
-        };
-        toString(): any;
-        tag: keyof typeof $giper_baza_unit_sand_tag;
-        schema: Record<string, typeof $giper_baza_node>;
-        with<This extends typeof $giper_baza_dict, const Schema extends Record<string, {
-            tag: keyof typeof $giper_baza_unit_sand_tag;
-            new (): {};
-        }>>(this: This, schema: Schema): Omit<This, "prototype"> & (new (...args: any[]) => $mol_type_override<InstanceType<This>, { readonly [Key in keyof Schema]: (auto?: any) => InstanceType<Schema[Key]> | null; }>) & {
-            schema: {
-                [x: string]: typeof $giper_baza_node;
-            } & Schema;
-        };
-        make<This extends typeof $mol_object>(this: This, config: Partial<InstanceType<This>>): InstanceType<This>;
-        $: $;
-        create<Instance>(this: new (init?: (instance: any) => void) => Instance, init?: (instance: $mol_type_writable<Instance>) => void): Instance;
-        toJSON(): any;
-        destructor(): void;
-        [Symbol.toPrimitive](): any;
-    };
-    export class $giper_baza_stat_series extends $giper_baza_stat_series_base {
-        tick(key: number, val: number): void;
+    class $giper_baza_stat_series extends $giper_baza_atom_list {
+        tick(key: number, val: number, count: number): void;
         _initial: number;
         initial(): number;
         max(): number;
         values(): number[];
     }
-    export {};
 }
 
 declare namespace $ {
@@ -9496,7 +9556,7 @@ declare namespace $ {
         readonly Minutes: (auto?: any) => $giper_baza_stat_series | null;
         readonly Hours: (auto?: any) => $giper_baza_stat_series | null;
         readonly Days: (auto?: any) => $giper_baza_stat_series | null;
-        readonly Years: (auto?: any) => $giper_baza_stat_series | null;
+        readonly Months: (auto?: any) => $giper_baza_stat_series | null;
     }>) & {
         schema: {
             [x: string]: typeof $giper_baza_node;
@@ -9505,7 +9565,7 @@ declare namespace $ {
             readonly Minutes: typeof $giper_baza_stat_series;
             readonly Hours: typeof $giper_baza_stat_series;
             readonly Days: typeof $giper_baza_stat_series;
-            readonly Years: typeof $giper_baza_stat_series;
+            readonly Months: typeof $giper_baza_stat_series;
         };
     };
     export class $giper_baza_stat_ranges extends $giper_baza_stat_ranges_base {

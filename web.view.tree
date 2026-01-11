@@ -1093,6 +1093,34 @@ $giper_baza_node_dump $mol_expander
 						sand <= unit_value* null
 				node <= node_inner* $giper_baza_node
 
+$giper_baza_land_rights $mol_list
+	land $giper_baza_land
+	rows /
+		<= Add $mol_view sub /
+			<= Add_key $mol_string
+				hint @ \Public key
+				value? <=> add_key? \
+				submit? <=> add_commit? null
+			<= Add_commit $mol_button_minor
+				click? <=> add_commit? null
+				sub /
+					<= Add_commit_icon $mol_icon_plus
+		^ gifts /
+			<= Gift*0 $mol_view sub /
+				<= Gift_peer* $mol_view sub /
+					<= Gift_avatar* $mol_avatar
+						id <= peer_id* \
+					<= Gift_name* $mol_paragraph
+						title <= peer_name* \
+				<= Gift_rank* $mol_select
+					value? <=> gift_rank*? \deny
+					dictionary *
+						deny @ \🛑 Deny
+						read @ \👀 Read
+						join @ \📢 Join
+						post @ \✍ Post
+						rule @ \👑 Rule
+
 $mol_icon_source $mol_icon path \M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z
 
 $mol_icon_source_fork $mol_icon path \M6,2A3,3 0 0,1 9,5C9,6.28 8.19,7.38 7.06,7.81C7.15,8.27 7.39,8.83 8,9.63C9,10.92 11,12.83 12,14.17C13,12.83 15,10.92 16,9.63C16.61,8.83 16.85,8.27 16.94,7.81C15.81,7.38 15,6.28 15,5A3,3 0 0,1 18,2A3,3 0 0,1 21,5C21,6.32 20.14,7.45 18.95,7.85C18.87,8.37 18.64,9 18,9.83C17,11.17 15,13.08 14,14.38C13.39,15.17 13.15,15.73 13.06,16.19C14.19,16.62 15,17.72 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.72 9.81,16.62 10.94,16.19C10.85,15.73 10.61,15.17 10,14.38C9,13.08 7,11.17 6,9.83C5.36,9 5.13,8.37 5.05,7.85C3.86,7.45 3,6.32 3,5A3,3 0 0,1 6,2M6,4A1,1 0 0,0 5,5A1,1 0 0,0 6,6A1,1 0 0,0 7,5A1,1 0 0,0 6,4M18,4A1,1 0 0,0 17,5A1,1 0 0,0 18,6A1,1 0 0,0 19,5A1,1 0 0,0 18,4M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z
@@ -1128,6 +1156,9 @@ $giper_baza_land_page $mol_page
 				<= Raw_meta $giper_baza_node_dump
 					title \Tine
 					node <= node_meta $giper_baza_node
+		<= Rights $mol_labeler
+			Content <= Rights_control $giper_baza_land_rights
+				land <= land
 		- <= Text $mol_textarea
 			value? <=> text? \
 			selection? <=> selection? /
