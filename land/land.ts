@@ -1040,8 +1040,16 @@ namespace $ {
 				}
 			}
 			
+			const seals_to_persist = [ ... Map.prototype.values.call( this._seal_shot ) ]
+			for( const seal of seals_to_persist ) {
+				if( !seal.alive_items.size ) continue
+				if( $mol_wire_sync( mine.units_persisted ).has( seal ) ) continue
+				persisting.push( seal )
+				mine.units_persisted.add( seal )
+			}
+
 			if( !persisting.length ) return
-			
+
 			return this.save( encoding, signing, persisting )
 		
 		}
