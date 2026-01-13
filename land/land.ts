@@ -135,11 +135,15 @@ namespace $ {
 
 		}
 
-		/** Returns seals with alive items that are not yet persisted (non-reactive) */
+		/**
+		 * Returns seals with alive items that are not yet persisted.
+		 * Uses Map.prototype.values.call to bypass reactive wrapper.
+		 */
 		seals_unpersisted() {
 			const mine = this.mine()
 			const seals = [] as $giper_baza_unit_seal[]
-			for( const seal of this._seal_shot.values() ) {
+			// Bypass reactive wrapper to avoid reactive dependencies
+			for( const seal of Map.prototype.values.call( this._seal_shot ) as Iterable<$giper_baza_unit_seal> ) {
 				if( !seal.alive_items.size ) continue
 				if( mine.units_persisted.has( seal ) ) continue
 				seals.push( seal )
@@ -1019,40 +1023,42 @@ namespace $ {
 				
 			}
 			
-			for( const gift of this._gift.values() ) {
-				
+			// Bypass reactive wrappers to avoid reactive dependencies during iteration
+			for( const gift of Map.prototype.values.call( this._gift ) as Iterable<$giper_baza_unit_gift> ) {
+
 				if( $mol_wire_sync( mine.units_persisted ).has( gift ) ) continue
-				
+
 				if( !$mol_wire_sync( this ).unit_seal( gift ) ) signing.push( gift )
-				
+
 				persisting.push( gift )
 				mine.units_persisted.add( gift )
-				
+
 				check_lord( gift.lord() )
 				check_lord( gift.mate() )
-				
+
 			}
-			
-			for( const kids of this._sand.values() ) {
-				for( const units of kids.values() ) {
-					for( const sand of units.values() ) {
-						
+
+			// Bypass reactive wrappers to avoid reactive dependencies during iteration
+			for( const kids of Map.prototype.values.call( this._sand ) as Iterable<$mol_wire_dict< string, $mol_wire_dict< string, $giper_baza_unit_sand > >> ) {
+				for( const units of Map.prototype.values.call( kids ) as Iterable<$mol_wire_dict< string, $giper_baza_unit_sand >> ) {
+					for( const sand of Map.prototype.values.call( units ) as Iterable<$giper_baza_unit_sand> ) {
+
 						if( $mol_wire_sync( mine.units_persisted ).has( sand ) ) continue
-						
+
 						if( !$mol_wire_sync( this ).unit_seal( sand ) ) {
 							encoding.push( sand )
 							signing.push( sand )
 						}
-						
+
 						persisting.push( sand )
 						mine.units_persisted.add( sand )
-						
+
 						check_lord( sand.lord() )
-				
+
 					}
 				}
 			}
-			
+
 			for( const seal of this.seals_unpersisted() ) {
 				persisting.push( seal )
 				mine.units_persisted.add( seal )
