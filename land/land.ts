@@ -135,10 +135,8 @@ namespace $ {
 
 		}
 
-		/** Returns seals with alive items that are not yet persisted */
-		@ $mol_mem
+		/** Returns seals with alive items that are not yet persisted (non-reactive) */
 		seals_unpersisted() {
-			$mol_wire_solid()
 			const mine = this.mine()
 			const seals = [] as $giper_baza_unit_seal[]
 			for( const seal of this._seal_shot.values() ) {
