@@ -983,11 +983,6 @@ namespace $ {
 			
 		}
 		
-		@ $mol_mem
-		saving() {
-			this.unit_persisting()
-		}
-
 		/** Encodes sands data */
 		@ $mol_mem
 		sand_encoding() {
@@ -1038,7 +1033,7 @@ namespace $ {
 
 		/** Persists diff to storage */
 		@ $mol_mem
-		unit_persisting() {
+		saving() {
 			$mol_wire_solid()
 
 			this.unit_signing()
