@@ -992,6 +992,7 @@ namespace $ {
 			for( const kids of this._sand.values() ) {
 				for( const units of kids.values() ) {
 					for( const sand of units.values() ) {
+						if( $mol_wire_sync( sand )._ball ) continue
 						sync.sand_encode( sand )
 					}
 				}
@@ -1107,6 +1108,7 @@ namespace $ {
 			const lands = new Map< $giper_baza_land, $giper_baza_link[] >()
 			for( const unit of units ) {
 				
+				if( !unit._land ) continue
 				let us = lands.get( unit._land! )
 				if( us ) us.push( unit.hash() )
 				else lands.set( unit._land!, [ unit.hash() ] )
