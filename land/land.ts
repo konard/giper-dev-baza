@@ -983,12 +983,11 @@ namespace $ {
 			
 		}
 		
-		/** Encodes sands data */
 		@ $mol_mem
 		sand_encoding() {
-
+			
 			this.loading()
-
+			
 			const sync = $mol_wire_sync( this )
 			for( const kids of this._sand.values() ) {
 				for( const units of kids.values() ) {
@@ -997,23 +996,22 @@ namespace $ {
 					}
 				}
 			}
-
+		
 		}
 		
-		/** Signs units */
 		@ $mol_mem
 		unit_signing() {
-
+			
 			this.sand_encoding()
-
+			
 			const sync = $mol_wire_sync( this )
 			const signing = [] as $giper_baza_unit_base[]
-
+			
 			for( const gift of this._gift.values() ) {
 				if( sync.unit_seal( gift ) ) continue
 				signing.push( gift )
 			}
-
+			
 			for( const kids of this._sand.values() ) {
 				for( const units of kids.values() ) {
 					for( const sand of units.values() ) {
@@ -1022,50 +1020,61 @@ namespace $ {
 					}
 				}
 			}
-
+			
 			if( !signing.length ) return
-
+			
 			const seals = sync.units_sign( signing )
 			for( const seal of seals ) this.seal_add( seal )
-
+			
 		}
 		
-		/** Persists diff to storage */
 		@ $mol_mem
 		saving() {
-
+			
 			this.unit_signing()
-
+			
 			const mine = this.mine()
 			const persisting = [] as $giper_baza_unit[]
-
+			
 			const check_lord = ( lord: $giper_baza_link )=> {
+				
 				const pass = this.lord_pass( lord )
 				if( !pass ) return
+				
 				if( $mol_wire_sync( mine.units_persisted ).has( pass ) ) return
+				
 				persisting.push( pass )
 				mine.units_persisted.add( pass )
+				
 			}
-
+			
 			for( const gift of this._gift.values() ) {
+				
 				if( $mol_wire_sync( mine.units_persisted ).has( gift ) ) continue
+				
 				persisting.push( gift )
 				mine.units_persisted.add( gift )
+				
 				check_lord( gift.lord() )
 				check_lord( gift.mate() )
+				
 			}
-
+			
 			for( const kids of this._sand.values() ) {
 				for( const units of kids.values() ) {
 					for( const sand of units.values() ) {
+						
 						if( $mol_wire_sync( mine.units_persisted ).has( sand ) ) continue
+						
 						persisting.push( sand )
 						mine.units_persisted.add( sand )
+						
 						check_lord( sand.lord() )
+						
 					}
 				}
 			}
-
+			
 			for( const seal of this._seal_shot.values() ) {
 				if( !seal.alive_items.size ) continue
 				if( $mol_wire_sync( mine.units_persisted ).has( seal ) ) continue
