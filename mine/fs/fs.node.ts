@@ -160,7 +160,7 @@ namespace $ {
 		override units_save( diff: $giper_baza_mine_diff ) {
 			
 			this.store_init()
-			// console.log( 'diff', diff.del, diff.ins  )
+			
 			this.store().atomic( side => {
 				
 				for( const unit of diff.del ) side.free( unit )
@@ -188,10 +188,9 @@ namespace $ {
 			
 			const parts = new Map( pack.parts( this.store().offsets, this.store().pool ) )
 			if( parts.size > 1 ) return $mol_fail( new Error( 'Wrong lands count', { cause: { count: parts.size } } ) )
-			// console.log( this.land().str, JSON.stringify( this.store().pool, null, '  ' ) )
+			
 			for( const [ land, part ] of parts ) {
 				if( land !== this.land().str ) return $mol_fail( new Error( 'Unexpected land', { cause: { expected: this.land().str, existen: land } } ) )
-				console.log( 'offsets', this.store().offsets )
 				
 				for( const unit of part.units ) {
 					this.units_persisted.add( unit )
