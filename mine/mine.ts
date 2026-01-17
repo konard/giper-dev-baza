@@ -32,7 +32,7 @@ namespace $ {
 		}
 		
 		/** Loads Ball from storage */
-		ball_load( path: string ): Uint8Array< ArrayBuffer > {
+		ball_load( sand: $giper_baza_unit_sand ): Uint8Array< ArrayBuffer > {
 			return null!
 		}
 		

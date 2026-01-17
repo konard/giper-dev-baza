@@ -13,7 +13,7 @@ namespace $ {
 	
 	$giper_baza_yard.masters = [
 		`http://localhost:9090/`,
-		$mol_dom_context.document.location.origin +'/',
+		// $mol_dom_context.document.location.origin +'/',
 	]
 	
 }

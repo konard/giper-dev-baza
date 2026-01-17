@@ -41,7 +41,7 @@ namespace $ {
 			return new Blob( [ this ], { type: 'application/vnd.giper_baza_pack.v1' } )
 		}
 		
-		parts( offsets?: WeakMap< $giper_baza_unit, number > ) {
+		parts( offsets?: WeakMap< ArrayBuffer, number >, pool?: $mol_memory_pool ) {
 			
 			const parts = new Map< string, $giper_baza_pack_part >
 			let part = null as null | $giper_baza_pack_part
@@ -55,6 +55,7 @@ namespace $ {
 					
 					case 'free': {
 						offset += 8
+						pool?.release( offset, 8 )
 						continue
 					}
 					
@@ -101,7 +102,7 @@ namespace $ {
 							buf.slice( offset, offset + 64 )
 						)
 						
-						offsets?.set( pass, offset )
+						offsets?.set( pass.buffer, offset )
 						part.units.push( pass )
 						
 						offset += pass.byteLength
@@ -120,7 +121,7 @@ namespace $ {
 							buf.slice( offset, offset + length )
 						)
 						
-						offsets?.set( seal, offset )
+						offsets?.set( seal.buffer, offset )
 						part.units.push( seal )
 						
 						offset += seal.byteLength
@@ -138,7 +139,7 @@ namespace $ {
 						
 						const sand = $giper_baza_unit_sand.from( buf.slice( offset, offset + length_sand ) )
 						
-						offsets?.set( sand, offset )
+						offsets?.set( sand.buffer, offset )
 						offset += sand.byteLength
 						
 						if( length_ball ) {
@@ -157,7 +158,7 @@ namespace $ {
 						const length = $giper_baza_unit_gift.length()
 						const gift = $giper_baza_unit_gift.from( buf.slice( offset, offset + length ) )
 						
-						offsets?.set( gift, offset )
+						offsets?.set( gift.buffer, offset )
 						part.units.push( gift )
 						
 						offset += gift.byteLength

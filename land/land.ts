@@ -1216,7 +1216,7 @@ namespace $ {
 			if( sand._vary !== undefined ) return sand._vary
 			if( sand._open !== null ) return sand._vary = ( $giper_baza_vary.take( sand._open ) as $giper_baza_vary_type[] )[0] ?? null
 			
-			sand._ball = sand._open = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync( this.mine() ).ball_load( sand.path() ) : sand.data()
+			sand._ball = sand._open = sand.size() > $giper_baza_unit_sand.size_equator ? $mol_wire_sync( this.mine() ).ball_load( sand ) : sand.data()
 			if( secret && sand._ball && sand.size() ) {
 				try {
 					sand._open = $mol_wire_sync( secret ).decrypt( sand._ball, sand.salt() )

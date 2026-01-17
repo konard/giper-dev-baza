@@ -5,6 +5,12 @@ namespace $ {
 		@ $mol_mem
 		init() {
 			
+			const admin = $mol_state_arg.value( 'admin' )
+			if( admin ) {
+				const pass = $giper_baza_auth_pass.from( admin )
+				this.land().give( pass, $giper_baza_rank_rule )
+			}
+			
 			this.title( process.env.DOMAIN || $node.os.hostname() )
 			
 			const source = this.aliases()

@@ -11,7 +11,7 @@ namespace $ {
 			}
 			
 			/** Loads Ball from storage */
-			override ball_load( path: string ): Uint8Array< ArrayBuffer > {
+			override ball_load( sand: $giper_baza_unit_sand ): Uint8Array< ArrayBuffer > {
 				return null!
 			}
 			

@@ -81,7 +81,7 @@ namespace $ {
 		}
 		
 		@ $mol_action
-		override ball_load( path: string ) {
+		override ball_load( sand: $giper_baza_unit_sand ) {
 			
 			return Sync( async ()=> {
 				
@@ -89,7 +89,7 @@ namespace $ {
 				const { Ball } = db.read( 'Ball' )
 				const land = this.land().str
 				
-				const res = await Ball.get([ land, path ])
+				const res = await Ball.get([ land, sand.path() ])
 				return new Uint8Array( res![0] )
 			
 			} )

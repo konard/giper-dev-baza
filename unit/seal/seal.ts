@@ -9,6 +9,7 @@ namespace $ {
 			return Math.ceil( ( 84 + size * 12 ) / 8 ) * 8
 		}
 
+		@ $mol_action
 		static make( size: number, wide: boolean ) {
 			const seal = this.from( this.length( size ) )
 			seal.kind( 'seal' )
