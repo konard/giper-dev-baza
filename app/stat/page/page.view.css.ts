@@ -16,8 +16,7 @@ namespace $.$$ {
 		$mol_chart: {
 			height: `20rem`,
 			flex: {
-				shrink: 0,
-				basis: `20rem`,
+				basis: `30rem`,
 			},
 		},
 		
