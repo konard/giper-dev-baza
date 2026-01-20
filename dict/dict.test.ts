@@ -89,7 +89,11 @@ namespace $.$$ {
 				await $mol_wire_async( user.Articles(null)! ).make([[ null, $giper_baza_rank_read ]]),
 				await $mol_wire_async( user.Articles(null)! ).make([[ null, $giper_baza_rank_read ]]),
 			]
-			$mol_assert_equal( user.Articles()?.remote_list(), articles )
+			
+			$mol_assert_equal(
+				user.Articles()?.remote_list().map( n => n[Symbol.toStringTag] ),
+				articles.map( n => n[Symbol.toStringTag] ),
+			)
 			
 			articles[0].Title(null)!.key( 'en', 'auto' )!.val( 'Hello!' )
 			$mol_assert_equal(

@@ -311,7 +311,7 @@ namespace $ {
 		Node< Node extends typeof $giper_baza_node >( Node: Node ): $giper_baza_fund< InstanceType< Node > > {
 			return new $giper_baza_fund( ( head: $giper_baza_link )=> {
 				return ( Node as typeof $giper_baza_node ).make({
-					land: ()=> this,//.sync(),
+					land: $mol_const( this ),//.sync(),
 					head: $mol_const( head ),
 				}) as InstanceType< Node >
 			} )

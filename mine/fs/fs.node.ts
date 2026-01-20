@@ -79,6 +79,15 @@ namespace $ {
 			super()
 		}
 		
+		destructor() {
+			
+			if( !this.sides[1].exists() ) return
+			
+			this.sides[1].open( 'write_only', 'write_only' ).flush()
+			this.sides[0].exists( false )
+			
+		}
+		
 		/** Prepare mirrors to read. */
 		@ $mol_memo.method
 		load_init() {
@@ -201,6 +210,10 @@ namespace $ {
 			}
 			
 			return []
+		}
+		
+		destructor() {
+			this.store().destructor()
 		}
 		
 	}
