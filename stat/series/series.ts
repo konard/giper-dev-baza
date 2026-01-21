@@ -10,7 +10,7 @@ namespace $ {
 			vals = [ ... vals.slice( key + 1 ), ... vals.slice( 0, key + 1 ) ]
 			for( let i = 1; i < count; ++i ) if( vals[ i ] < vals [ i-1 ] ) vals[i] = vals[ i-1 ]
 			vals = [ ... vals.slice( -1 - key ), ... vals.slice( 0, -1 - key ) ]
-			this.val( vals )
+			this.values( vals )
 		}
 		
 		_initial!: number
@@ -27,8 +27,17 @@ namespace $ {
 			return max
 		}
 		
-		values() {
-			return ( this.val() ?? [] ) as number[]
+		@ $mol_mem
+		values( next?: number[] ) {
+			
+			if( next ) {
+				let last = 0
+				next = next.map( v => ([ v, last ]=[ v - last, v ])[ 0 ] )
+			}
+
+			let last = 0
+			return ( ( this.val( next ) ?? [] ) as number[] ).map( v => last += v )
+			
 		}
 		
 	}
