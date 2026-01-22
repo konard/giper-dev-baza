@@ -1,5 +1,28 @@
 namespace $ {
 	
+	function batch< Host, Item >(
+		host: Host,
+		items: ( this: Host )=> Item[],
+		task: ( this: Host, item: Item[] )=> void,
+	) {
+
+		items.call( host )
+		
+		const skip = new Set< Item >()
+		
+		while( true ) {
+			
+			const snap = $mol_wire_sync( items ).call( host )
+			const news = snap.filter( item => !skip.has( item ) )
+			if( !news.length ) break
+			
+			$mol_wire_sync( task ).call( host, news )
+			for( const item of news ) skip.add( item )
+
+		}
+		
+	}
+
 	export const $giper_baza_land_root = {
 		data: new $giper_baza_link( '' ), // 0
 		tine: new $giper_baza_link( 'AQAAAAAA' ), // 1
@@ -381,7 +404,7 @@ namespace $ {
 		/** Picks units between Face and current state. */
 		diff_units( skip_faces = new $giper_baza_face_map ): $giper_baza_unit[] {
 			
-			this.unit_signing()
+			this.units_signing()
 			
 			const skipped = new Map< string, Set< $giper_baza_unit_base > >()
 			const delta = new Set< $giper_baza_unit_base >()
@@ -1051,32 +1074,15 @@ namespace $ {
 		}
 		
 		@ $mol_mem
-		unit_signing() {
-			
+		units_signing() {
 			this.sand_encoding()
-			this.units_unsigned() // deps
-			
-			const sync = $mol_wire_sync( this )
-			const signed = new Set< $giper_baza_unit_base >()
-			
-			// proecss while new units apper
-			while( true ) {
-				
-				const units = sync.units_unsigned().filter( unit => !signed.has( unit ) )
-				if( !units.length ) break
-				
-				const seals = sync.units_sign( units )
-				for( const seal of seals ) this.seal_add( seal )
-				for( const unit of units ) signed.add( unit )
-			
-			}
-			
+			batch( this, this.units_unsigned, this.units_sign )
 		}
 		
 		@ $mol_mem
 		saving() {
 			
-			this.unit_signing()
+			this.units_signing()
 			
 			const mine = this.mine()
 			const persisting = [] as $giper_baza_unit[]
@@ -1149,6 +1155,8 @@ namespace $ {
 		
 		async units_sign( units: readonly $giper_baza_unit_base[] ) {
 			
+			await Promise.resolve() // prevent deps
+			
 			const lands = new Map< $giper_baza_land, $giper_baza_link[] >()
 			for( const unit of units ) {
 				
@@ -1202,8 +1210,10 @@ namespace $ {
 				
 			} )
 			
-			return Promise.all( threads )
+			const seals = await Promise.all( threads )
+			for( const seal of seals ) this.seal_add( seal )
 			
+			return seals
 		}
 		
 		async sand_encode( sand: $giper_baza_unit_sand ) {
