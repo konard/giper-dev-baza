@@ -438,7 +438,7 @@ namespace $ {
 			for( const kids of this._sand.values() ) {
 				for( const peers of kids.values() ) {
 					for( const sand of peers.values() ) {
-						this.sand_decode( sand )
+						this.sand_load( sand )
 						collect( sand )
 					}
 				}
@@ -1231,6 +1231,12 @@ namespace $ {
 			sand.ball( bin )
 			
 			return sand
+		}
+		
+		@ $mol_mem_key
+		sand_load( sand: $giper_baza_unit_sand ) {
+			if( sand._ball ) return
+			sand._ball = sand.big() ? $mol_wire_sync( this.mine() ).ball_load( sand ) : sand.data()
 		}
 		
 		@ $mol_mem_key
