@@ -2,8 +2,14 @@ namespace $.$$ {
 	export class $giper_baza_land_rights extends $.$giper_baza_land_rights {
 		
 		@ $mol_mem
+		rows() {
+			if( this.enabled() ) return super.rows()
+			else return this.gifts()
+		}
+		
+		@ $mol_mem
 		override gifts() {
-			return [ ... this.land()._gift.keys() ]
+			return [ ... this.land()._gift.keys() ].reverse()
 				.map( link => this.Gift( new $giper_baza_link( link ) ) )
 		}
 		
@@ -12,6 +18,7 @@ namespace $.$$ {
 		}
 		
 		override peer_name( lord: $giper_baza_link ) {
+			if( !lord.str ) return super.peer_name( lord )
 			return this.$.$giper_baza_glob.Node( lord, $giper_baza_entity ).title() || lord.str
 		}
 		
@@ -25,6 +32,19 @@ namespace $.$$ {
 			const auth = $giper_baza_auth_pass.from( this.add_key() )
 			this.land().give( auth, $giper_baza_rank_read )
 			this.add_key( '' )
+		}
+		
+		@ $mol_mem
+		rank_options() {
+			if( this.land().encrypted() ) return super.rank_options()
+			const options = { ... super.rank_options() }
+			delete ( options as any ).deny
+			return options
+		}
+		
+		@ $mol_mem
+		enabled() {
+			return this.land().lord_rank( this.land().auth().pass().lord() ) >= $giper_baza_rank_rule
 		}
 		
 	}

@@ -65,7 +65,7 @@ namespace $ {
 		
 		/** Ability to make changes by current peer. */
 		can_change() {
-			return this.land().pass_rank( this.land().auth().pass() ) > $giper_baza_rank_read
+			return this.land().pass_rank( this.land().auth().pass() ) >= $giper_baza_rank_post( 'late' )
 		}
 		
 		/** Time of last changed unit inside Node subtree */
