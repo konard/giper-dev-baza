@@ -53,6 +53,14 @@ namespace $.$$ {
 			check( new $mol_time_moment )
 		},
 		
+		"Dura"( $ ) {
+			check( new $mol_time_duration( 'P1Y2M3DT4h5m6.6s' ) )
+		},
+		
+		"Span"( $ ) {
+			check( new $mol_time_interval( 'T09:00/PT9h' ) )
+		},
+		
 		"JSON"( $ ) {
 			check({ foo: [ 'bar' ] })
 			check([ { foo: 'bar' } ])

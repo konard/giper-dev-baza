@@ -22,15 +22,15 @@ namespace $ {
 	$giper_baza_vary.type({
 		type: $mol_time_duration,
 		keys: [ 'dura' ],
-		lean: obj => [ obj.toString() ],
-		rich: ([ str ])=> new $mol_time_duration( str ),
+		lean: obj => obj.toArray(),
+		rich: data => new $mol_time_duration( data ),
 	})
 	
 	$giper_baza_vary.type({
 		type: $mol_time_moment,
 		keys: [ 'time' ],
-		lean: obj => [ obj.toString() ],
-		rich: ([ str ])=> new $mol_time_moment( str ),
+		lean: obj => obj.toArray(),
+		rich: data => new $mol_time_moment( data ),
 	})
 	
 	$giper_baza_vary.type({
